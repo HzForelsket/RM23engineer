@@ -66,7 +66,7 @@
     <ClCompile Include="BSP\STM32F4xxxx\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_ltdc.c" />
     <ClCompile Include="CHASSIS.cpp" />
     <ClCompile Include="CLAW.cpp" />
-    <ClCompile Include="CONTROL.cpp" />
+    <ClCompile Include="ROBOT.cpp" />
     <ClCompile Include="CRC_CHECK.cpp" />
     <ClCompile Include="init.cpp" />
     <ClCompile Include="JUDGEMENT.cpp" />
@@ -87,7 +87,7 @@
     <ClInclude Include="algorithm\PID.h" />
     <ClInclude Include="CHASSIS.h" />
     <ClInclude Include="CLAW.h" />
-    <ClInclude Include="CONTROL.h" />
+    <ClInclude Include="ROBOT.h" />
     <ClInclude Include="CRC_CHECK.h" />
     <ClInclude Include="Include\CAN.h" />
     <ClInclude Include="Include\delay.h" />

@@ -4,8 +4,7 @@
 #include"RC.h"
 #include"VIEW.h"
 
-
-class CONTROL
+class ROBOT
 {
 	static const int32_t CHASSIS_MAX_SPEED = 2000;
 	static const int32_t MAX_ROTATE_MINE_SPEED = 200;

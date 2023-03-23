@@ -10,10 +10,12 @@ public:
 
 class RC
 {
-	enum ROD_POSITION
+public:
+	enum class ROD_POSITION
 	{
 		UP=1,DOWN,MID
 	};
+private:
 	UART* m_uart = nullptr;
 	void RC_IRQHandler();
 	uint8_t *m_recieve_data=nullptr, *m_trainsmit_data=nullptr;
