@@ -4,13 +4,13 @@ void RC::RC_IRQHandler()
 {
 	m_recieve_data = m_uart->m_receive_date;
 	if (m_uart->m_length != 18)return;
-	right_vertical = ((m_recieve_data[0] | m_recieve_data[1] << 8) & 0x07FF) - 1024;
-	right_horizontal = ((m_recieve_data[1] >> 3 | m_recieve_data[2] << 5) & 0x07FF) - 1024;
-	left_vertical = ((m_recieve_data[2] >> 6 | m_recieve_data[3] << 2 | m_recieve_data[4] << 10) & 0x07FF) - 1024;
-	left_horizontal = ((m_recieve_data[4] >> 1 | m_recieve_data[5] << 7) & 0x07FF) - 1024;
+	right_horizontal = ((m_recieve_data[0] | m_recieve_data[1] << 8) & 0x07FF) - 1024;
+	right_vertical = ((m_recieve_data[1] >> 3 | m_recieve_data[2] << 5) & 0x07FF) - 1024;
+	left_horizontal = ((m_recieve_data[2] >> 6 | m_recieve_data[3] << 2 | m_recieve_data[4] << 10) & 0x07FF) - 1024;
+	left_vertical = ((m_recieve_data[4] >> 1 | m_recieve_data[5] << 7) & 0x07FF) - 1024;
 
-	right_rod = (ROD_POSITION)(((m_recieve_data[5] >> 4) & 0x0C) >> 2);//s2
-	left_rod = (ROD_POSITION)((m_recieve_data[5] >> 4) & 0x03);//s1
+	left_rod = (ROD_POSITION)(((m_recieve_data[5] >> 4) & 0x0C) >> 2);//s2
+	right_rod = (ROD_POSITION)((m_recieve_data[5] >> 4) & 0x03);//s1
 
 	m_mouse.x = ((int16_t)m_recieve_data[6]) | (((int16_t)m_recieve_data[7]) << 8);
 	m_mouse.y = ((int16_t)m_recieve_data[8]) | (((int16_t)m_recieve_data[9]) << 8);

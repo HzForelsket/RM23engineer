@@ -2,8 +2,10 @@
 #include "MOTOR.h"
 #include"PID.h"
 #include"CAN.h"
+#include"SELF_CHECK.h"
 class MOTOR_3508 :
-    public MOTOR
+    public MOTOR,
+    public SELF_CHECK
 {
 public:
     enum ID:uint16_t
@@ -13,7 +15,6 @@ public:
     const int16_t MAX_ELECTRICITY = 0, MAX_SPEED = 0;
     const int16_t MAX_ANGLE = 0, MIN_ANGLE = 0;
 private :
-    int8_t m_dirrection = 0;
     int8_t m_now_temperature=0;
     int16_t m_now_speed=0;
     int16_t m_now_angle=0;

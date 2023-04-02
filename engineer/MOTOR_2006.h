@@ -2,18 +2,19 @@
 #include "MOTOR.h"
 #include"PID.h"
 #include"CAN.h"
+#include"SELF_CHECK.h"
 class MOTOR_2006 :
-    public MOTOR
+    public MOTOR,
+    public SELF_CHECK
 {
 public:
-    enum class ID :uint16_t
+    enum  ID
     {
         ID1 = 0x201, ID2, ID3, ID4, ID5, ID6, ID7, ID8
     };
 private:
     const int16_t MAX_ELECTRICITY = 0, MAX_SPEED = 0;
     const int16_t MAX_ANGLE = 0, MIN_ANGLE = 0;
-    int8_t m_dirrection = 0;
     int8_t m_now_temperature = 0;
     int16_t m_now_speed = 0;
     int16_t m_now_angle = 0;
@@ -32,6 +33,8 @@ private:
 public:
     void setSpeed(int32_t speed);
     void changeAngle(int32_t angle);
+    void setAngle(int32_t angle);
+    void changeSpeed(int32_t speed);
     int getAngle();
     int getSpeed();
     void upData();

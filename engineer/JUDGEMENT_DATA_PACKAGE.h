@@ -1,5 +1,6 @@
 #pragma once
 #include<cstdint>
+#pragma pack(1)
 typedef __packed struct
 {
 	uint8_t game_type : 4;
@@ -162,6 +163,7 @@ typedef __packed struct
 	uint8_t operate_tpye;
 	uint8_t layer;
 } ext_client_custom_graphic_delete_t;
+
 typedef __packed struct
 {
 	uint8_t graphic_name[3];

@@ -1,4 +1,12 @@
 #include "UART.h"
+class UART_X
+{
+public:
+    UART* m_UART;
+private:
+};
+UART_X uart[7];
+
 USART_TypeDef* UART::get_UARTx()
 {
     return m_uart;
@@ -33,6 +41,9 @@ void UART::receive()
         uint8_t temp;
         if (USART_GetITStatus(m_uart, USART_IT_IDLE) == SET)
         {
+            DMA_Cmd(m_stream, DISABLE);							//暂停DMA传输 
+            memcpy(m_receive_date, DMA_TEMP, sizeof(uint8_t) * MAXLEN);
+
             temp = m_uart->SR;
             temp = m_uart->DR;	//读取SR DR数据可清除“空闲中断”标志
             m_length = MAXLEN - DMA_GetCurrDataCounter(m_stream);
@@ -40,8 +51,6 @@ void UART::receive()
             {
                 //Receive_DataPack();/*DMA接收模式时处理接收数据函数*/
             }
-            
-            DMA_Cmd(m_stream, DISABLE);							//暂停DMA传输 
             // 清除DMA中断标志位
             //DMA_ClearFlag(m_stream, DMA_FLAG_TCIF5 | DMA_FLAG_FEIF5 | DMA_FLAG_DMEIF5 | DMA_FLAG_TEIF5 | DMA_FLAG_HTIF5);//清除DMA2_Steam7传输完成标志
             switch ((uint32_t)m_stream)
@@ -97,12 +106,12 @@ void UART::init(USART_TypeDef* UARTx, uint32_t BaudRate, std::vector<GPIO> UART_
     IRQn_Type need_IRQn;
     switch ((uint32_t)UARTx)
     {
-    case USART1_BASE:need_IRQn = USART1_IRQn; m_stream = DMA2_Stream5; break;
-    case USART2_BASE:need_IRQn = USART2_IRQn; m_stream = DMA1_Stream5; break;
-    case USART3_BASE:need_IRQn = USART3_IRQn; m_stream = DMA1_Stream1; break;
-    case UART4_BASE:need_IRQn = UART4_IRQn; m_stream = DMA1_Stream2; break;
-    case UART5_BASE:need_IRQn = UART5_IRQn; m_stream = DMA1_Stream0; break;
-    case USART6_BASE:need_IRQn = USART6_IRQn; m_stream = DMA2_Stream1; break;
+    case USART1_BASE:need_IRQn = USART1_IRQn; m_stream = DMA2_Stream5; uart[1].m_UART = this; break;
+    case USART2_BASE:need_IRQn = USART2_IRQn; m_stream = DMA1_Stream5; uart[2].m_UART = this; break;
+    case USART3_BASE:need_IRQn = USART3_IRQn; m_stream = DMA1_Stream1; uart[3].m_UART = this; break;
+    case UART4_BASE:need_IRQn = UART4_IRQn; m_stream = DMA1_Stream2;   uart[4].m_UART = this; break;
+    case UART5_BASE:need_IRQn = UART5_IRQn; m_stream = DMA1_Stream0;   uart[5].m_UART = this; break;
+    case USART6_BASE:need_IRQn = USART6_IRQn; m_stream = DMA2_Stream1; uart[6].m_UART = this; break;
     default:break;
     }
 
@@ -118,8 +127,8 @@ void UART::init(USART_TypeDef* UARTx, uint32_t BaudRate, std::vector<GPIO> UART_
     {
         USART_ITConfig(UARTx, USART_IT_IDLE, ENABLE);;
         USART_DMACmd(UARTx, USART_DMAReq_Rx, ENABLE);
-        if (UARTx == USART6) DMA_RX_Config(m_stream, DMA_Channel_5, (u32)&UARTx->DR, (u32)m_receive_date, MAXLEN);
-        else  DMA_RX_Config(m_stream, DMA_Channel_4, (u32)&UARTx->DR, (u32)m_receive_date, MAXLEN);//其他都是通道4
+        if (UARTx == USART6) DMA_RX_Config(m_stream, DMA_Channel_5, (u32)&UARTx->DR, (u32)DMA_TEMP, MAXLEN);
+        else  DMA_RX_Config(m_stream, DMA_Channel_4, (u32)&UARTx->DR, (u32)DMA_TEMP, MAXLEN);//其他都是通道4
     }
     
     USART_Init(UARTx, &UART_init);
@@ -188,50 +197,50 @@ void UART::DMA_TX_Config(DMA_Stream_TypeDef* DMA_Streamx, u32 chx, u32 par, u32 
 
 extern "C" void USART1_IRQHandler(void)
 {
-    if (uart1.UART_IRQHandler)
+    if (uart[1].m_UART->UART_IRQHandler)
     {
-        uart1.receive();
-        uart1.UART_IRQHandler(uart1.p_use);
+        uart[1].m_UART->receive();
+        uart[1].m_UART->UART_IRQHandler(uart[1].m_UART->p_use);
     }
 }
 extern "C" void USART2_IRQHandler(void)
 {
-    if (uart2.UART_IRQHandler)
+    if (uart[2].m_UART->UART_IRQHandler)
     {
-        uart2.receive();
-        uart2.UART_IRQHandler(uart2.p_use);
+        uart[2].m_UART->receive();
+        uart[2].m_UART->UART_IRQHandler(uart[2].m_UART->p_use);
     }
 }
 extern "C" void USART3_IRQHandler(void)
 {
-    if (uart3.UART_IRQHandler)
+    if (uart[3].m_UART->UART_IRQHandler)
     {
-        uart3.receive();
-        uart3.UART_IRQHandler(uart3.p_use);
+        uart[3].m_UART->UART_IRQHandler(uart[3].m_UART->p_use);
+        uart[3].m_UART->receive();
     }
 }
 extern "C" void UART4_IRQHandler(void)
 {
-    if (uart4.UART_IRQHandler)
+    if (uart[4].m_UART->UART_IRQHandler)
     {
-        uart4.receive();
-        uart4.UART_IRQHandler(uart4.p_use);
-
+        uart[4].m_UART->receive();
+        uart[4].m_UART->UART_IRQHandler(uart[4].m_UART->p_use);
     }
 }
 extern "C" void UART5_IRQHandler(void)
 {
-    if (uart5.UART_IRQHandler)
+    
+    if (1||uart[5].m_UART->UART_IRQHandler)
     {
-        uart5.receive();
-        uart5.UART_IRQHandler(uart5.p_use);
+        uart[5].m_UART->receive();
+        //uart[5].m_UART->UART_IRQHandler(uart[5].m_UART->p_use);
     }
 }
 extern "C" void USART6_IRQHandler(void)
 {
-    if (uart6.UART_IRQHandler)
+    if (uart[6].m_UART->UART_IRQHandler)
     {
-        uart6.receive();
-        uart6.UART_IRQHandler(uart6.p_use);
+        uart[6].m_UART->receive();
+        uart[6].m_UART->UART_IRQHandler(uart[6].m_UART->p_use);
     }
 }

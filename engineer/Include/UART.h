@@ -6,11 +6,12 @@
 #include<vector>
 #include"TIMER.h"
 constexpr int MAXLEN = 100;
+
 class UART
 {
-	
 	USART_TypeDef* m_uart;
 	DMA_Stream_TypeDef* m_stream;
+	uint8_t DMA_TEMP[MAXLEN];
 	void DMA_RX_Config(DMA_Stream_TypeDef* DMA_Streamx, u32 chx, u32 par, u32 mar, u16 ndtr);
 	void DMA_TX_Config(DMA_Stream_TypeDef* DMA_Streamx, u32 chx, u32 par, u32 mar, u16 ndtr);
 	uint16_t m_transmit_length = 0;
@@ -29,4 +30,3 @@ public:
 	void set_transmit_data(uint8_t* data, uint32_t length);
 
 };
-extern UART uart1, uart2, uart3, uart4, uart5, uart6;

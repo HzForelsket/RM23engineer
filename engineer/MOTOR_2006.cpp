@@ -10,6 +10,16 @@ void MOTOR_2006::changeAngle(int32_t angle)
 	m_change_angle += angle;
 }
 
+void MOTOR_2006::setAngle(int32_t angle)
+{
+	m_change_angle = angle - m_now_angle;
+}
+
+void MOTOR_2006::changeSpeed(int32_t speed)
+{
+	m_set_speed = speed - m_now_speed;
+}
+
 int MOTOR_2006::getAngle()
 {
 	return m_now_angle;
@@ -39,8 +49,8 @@ void MOTOR_2006::upData()
 		if (!m_change_angle)setSpeed(0);
 		else
 		{
-			//if (!getSpeed())
-				//setSpeed(1);
+			//if(!getSpeed())
+			//setSpeed(1);
 		}
 	}
 	m_set_electricity += m_pid_speed_to_electricity.Delta((int32_t)m_set_speed - (int32_t)m_now_speed);
@@ -50,9 +60,13 @@ void MOTOR_2006::upData()
 	need_electricity[1] = set_electricity & 0x00ff;
 
 	if (m_id <= ID::ID4 && m_id >= ID::ID1)
-		m_can->set_transmit_data(need_electricity, 2, (uint8_t)m_id - 1, 0x200);
+	{
+		m_can->set_transmit_data(need_electricity, 2, m_id - (int16_t)ID::ID1, 0x200);
+	}
 	else if (m_id > ID::ID4 && m_id <= ID::ID8)
-		m_can->set_transmit_data(need_electricity, 2, (uint8_t)m_id - 1, 0x1ff);
+	{
+		m_can->set_transmit_data(need_electricity, 2, m_id - (int16_t)ID::ID5, 0x1ff);
+	}
 }
 
 void MOTOR_2006::init(PID angle_to_speed, PID speed_to_electricity, ID id, CAN* can)
@@ -65,6 +79,7 @@ void MOTOR_2006::init(PID angle_to_speed, PID speed_to_electricity, ID id, CAN* 
 
 MOTOR_2006::MOTOR_2006(PID angle_to_speed, PID speed_to_electricity, ID id, CAN* can, int16_t angleMax, int16_t angleMin, int16_t electricityMax, int16_t speedMAX)
 	:MAX_ANGLE(angleMax), MIN_ANGLE(angleMin), MAX_ELECTRICITY(electricityMax), MAX_SPEED(speedMAX)
+	, SELF_CHECK(sizeof(m_now_electricity),&m_now_electricity, this)
 {
 	m_can = can;
 	m_id = id;

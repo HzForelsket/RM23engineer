@@ -95,6 +95,7 @@ void JUDGEMENT::init(UART* uart)
 
 void JUDGEMENT::draw_line(int16_t begin_x, int16_t begin_y, int16_t end_x, int16_t end_y)
 {
+
 }
 
 void JUDGEMENT::draw_rectangle(int16_t begin_x, int16_t begin_y, int16_t end_x, int16_t end_y)
@@ -111,10 +112,39 @@ void JUDGEMENT::draw_ellipse(int16_t a, int16_t b, int16_t center_x, int16_t cen
 
 void JUDGEMENT::draw_arc()
 {
+	/*int i;
+
+	for (i = 0; i < 3 && imagename[i] != 0; i++)
+		image->graphic_name[2 - i] = imagename[i];
+	image->graphic_tpye = UI_Graph_Arc;
+	image->operate_tpye = Graph_Operate;
+	image->layer = Graph_Layer;
+	image->color = Graph_Color;
+	image->width = Graph_Width;
+	image->start_x = Start_x;
+	image->start_y = Start_y;
+	image->start_angle = Graph_StartAngle;
+	image->end_angle = Graph_EndAngle;
+	image->end_x = x_Length;
+	image->end_y = y_Length;*/
 }
 
 void JUDGEMENT::draw_double(int16_t decimal_digits, int16_t x, int16_t y, float data)
 {
+	/*int i;
+
+	for (i = 0; i < 3 && imagename[i] != 0; i++)
+		image->graphic_name[2 - i] = imagename[i];
+	image->graphic_tpye = UI_Graph_Float;
+	image->operate_tpye = Graph_Operate;
+	image->layer = Graph_Layer;
+	image->color = Graph_Color;
+	image->width = Graph_Width;
+	image->start_x = Start_x;
+	image->start_y = Start_y;
+	image->start_angle = Graph_Size;
+	image->end_angle = Graph_Digit;
+	image->graph_Float = Graph_Float;*/
 }
 
 void JUDGEMENT::draw_int(int16_t x, int16_t y, int32_t data)

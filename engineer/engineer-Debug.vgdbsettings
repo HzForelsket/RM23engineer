@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<VisualGDBProjectSettings2 xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<VisualGDBProjectSettings2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ConfigurationName>Debug</ConfigurationName>
   <Project xsi:type="com.visualgdb.project.embedded">
     <CustomSourceDirectories>
@@ -149,7 +149,7 @@
     <EnableVirtualHalts>false</EnableVirtualHalts>
     <DynamicAnalysisSettings>
       <StackVerifier>
-        <VerifyStackBounds>true</VerifyStackBounds>
+        <VerifyStackBounds>false</VerifyStackBounds>
         <AutoStepOutOfHook>true</AutoStepOutOfHook>
         <StackLimitControlledByUser>false</StackLimitControlledByUser>
         <ExplicitSizeLimit>0</ExplicitSizeLimit>
@@ -158,7 +158,7 @@
       </StackVerifier>
       <RealTimeWatch>
         <SupportRTOSAnalysis>false</SupportRTOSAnalysis>
-        <SupportFunctionInstrumentation>true</SupportFunctionInstrumentation>
+        <SupportFunctionInstrumentation>false</SupportFunctionInstrumentation>
         <MeasureOverhead>true</MeasureOverhead>
       </RealTimeWatch>
       <InstrumentedFunctions>

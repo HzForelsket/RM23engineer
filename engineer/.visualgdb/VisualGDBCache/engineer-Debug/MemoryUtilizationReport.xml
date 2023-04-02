@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
-<MemoryUtilizationReport xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<MemoryUtilizationReport xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Memories>
     <MemoryUtilization>
       <MemoryName>FLASH</MemoryName>
-      <Used>29200</Used>
+      <Used>47588</Used>
       <Total>1048576</Total>
     </MemoryUtilization>
     <MemoryUtilization>
       <MemoryName>SRAM</MemoryName>
-      <Used>4036</Used>
+      <Used>6188</Used>
       <Total>114688</Total>
     </MemoryUtilization>
     <MemoryUtilization>

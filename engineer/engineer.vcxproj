@@ -66,14 +66,16 @@
     <ClCompile Include="BSP\STM32F4xxxx\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_ltdc.c" />
     <ClCompile Include="CHASSIS.cpp" />
     <ClCompile Include="CLAW.cpp" />
+    <ClCompile Include="GRAPH.cpp" />
     <ClCompile Include="ROBOT.cpp" />
     <ClCompile Include="CRC_CHECK.cpp" />
     <ClCompile Include="init.cpp" />
     <ClCompile Include="JUDGEMENT.cpp" />
-    <ClCompile Include="LEDBlink.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="MOTOR_2006.cpp" />
     <ClCompile Include="MOTOR_3508.cpp" />
     <ClCompile Include="RC.cpp" />
+    <ClCompile Include="SELF_CHECK.cpp" />
     <ClCompile Include="Src\CAN.cpp" />
     <ClCompile Include="Src\delay.cpp" />
     <ClCompile Include="Src\GPIO.cpp" />
@@ -87,6 +89,7 @@
     <ClInclude Include="algorithm\PID.h" />
     <ClInclude Include="CHASSIS.h" />
     <ClInclude Include="CLAW.h" />
+    <ClInclude Include="GRAPH.h" />
     <ClInclude Include="ROBOT.h" />
     <ClInclude Include="CRC_CHECK.h" />
     <ClInclude Include="Include\CAN.h" />
@@ -102,6 +105,7 @@
     <ClInclude Include="MOTOR_2006.h" />
     <ClInclude Include="MOTOR_3508.h" />
     <ClInclude Include="RC.h" />
+    <ClInclude Include="SELF_CHECK.h" />
     <ClInclude Include="VECTOR3.h" />
     <ClInclude Include="VIEW.h" />
     <None Include="stm32.props" />

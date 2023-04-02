@@ -6,7 +6,10 @@ class MOTOR
 public:
 	virtual void upData()=0;
 	virtual void setSpeed(int32_t speed) = 0;
+	virtual void changeSpeed(int32_t speed)=0;
+
 	virtual void changeAngle(int32_t angle) = 0;
+	virtual void setAngle(int32_t angle) = 0;
 	virtual int getAngle() = 0;
 	virtual int getSpeed() = 0;
 };

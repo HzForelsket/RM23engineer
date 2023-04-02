@@ -32,8 +32,6 @@ int MOTOR_3508::getSpeed()
 
 void MOTOR_3508::upData()
 {
-	static uint32_t sum = 0;
-	sum++;
 	int16_t pre_angle, set_electricity;
 	static int16_t test_change_angle;
 	uint8_t* data = m_can->read_data((uint16_t)m_id)->second.m_receive_data;
@@ -80,7 +78,8 @@ void MOTOR_3508::init(PID angle_to_speed, PID speed_to_electricity, ID id, CAN* 
 }
 
 MOTOR_3508::MOTOR_3508(PID angle_to_speed, PID speed_to_electricity, ID id, CAN* can, int16_t angleMax, int16_t angleMin, int16_t electricityMax,int16_t speedMAX)
-	:MAX_ANGLE(angleMax), MIN_ANGLE(angleMin), MAX_ELECTRICITY(electricityMax),MAX_SPEED(speedMAX)
+	:MAX_ANGLE(angleMax), MIN_ANGLE(angleMin), MAX_ELECTRICITY(electricityMax),MAX_SPEED(speedMAX),
+	 SELF_CHECK(sizeof(m_now_electricity),&m_now_electricity,this )
 {
 	m_can = can;
 	m_id = id;

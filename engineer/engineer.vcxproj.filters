@@ -30,7 +30,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LEDBlink.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
     <None Include="stm32.props">
@@ -235,6 +235,12 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="CRC_CHECK.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="SELF_CHECK.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="GRAPH.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -462,6 +468,12 @@
       <Filter>Header files</Filter>
     </ClInclude>
     <ClInclude Include="JUDGEMENT_DATA_PACKAGE.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="SELF_CHECK.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="GRAPH.h">
       <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>
