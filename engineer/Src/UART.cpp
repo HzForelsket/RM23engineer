@@ -41,18 +41,19 @@ void UART::receive()
         uint8_t temp;
         if (USART_GetITStatus(m_uart, USART_IT_IDLE) == SET)
         {
-            DMA_Cmd(m_stream, DISABLE);							//ÔİÍ£DMA´«Êä 
-            memcpy(m_receive_date, DMA_TEMP, sizeof(uint8_t) * MAXLEN);
-
+            DMA_Cmd(m_stream, DISABLE);							//æš‚åœDMAä¼ è¾“ 
+            //uint8_t* t = new uint8_t[m_length + 1];
+            //t[0] = m_length;
+            memcpy(m_receive_date, DMA_TEMP, sizeof(uint8_t) * m_length);
             temp = m_uart->SR;
-            temp = m_uart->DR;	//¶ÁÈ¡SR DRÊı¾İ¿ÉÇå³ı¡°¿ÕÏĞÖĞ¶Ï¡±±êÖ¾
+            temp = m_uart->DR;	//è¯»å–SR DRæ•°æ®å¯æ¸…é™¤â€œç©ºé—²ä¸­æ–­â€æ ‡å¿—
             m_length = MAXLEN - DMA_GetCurrDataCounter(m_stream);
             if (0 != m_length)
             {
-                //Receive_DataPack();/*DMA½ÓÊÕÄ£Ê½Ê±´¦Àí½ÓÊÕÊı¾İº¯Êı*/
+                //Receive_DataPack();/*DMAæ¥æ”¶æ¨¡å¼æ—¶å¤„ç†æ¥æ”¶æ•°æ®å‡½æ•°*/
             }
-            // Çå³ıDMAÖĞ¶Ï±êÖ¾Î»
-            //DMA_ClearFlag(m_stream, DMA_FLAG_TCIF5 | DMA_FLAG_FEIF5 | DMA_FLAG_DMEIF5 | DMA_FLAG_TEIF5 | DMA_FLAG_HTIF5);//Çå³ıDMA2_Steam7´«ÊäÍê³É±êÖ¾
+            // æ¸…é™¤DMAä¸­æ–­æ ‡å¿—ä½
+            //DMA_ClearFlag(m_stream, DMA_FLAG_TCIF5 | DMA_FLAG_FEIF5 | DMA_FLAG_DMEIF5 | DMA_FLAG_TEIF5 | DMA_FLAG_HTIF5);//æ¸…é™¤DMA2_Steam7ä¼ è¾“å®Œæˆæ ‡å¿—
             switch ((uint32_t)m_stream)
             {
             case DMA2_Stream5_BASE:DMA_ClearFlag(m_stream, DMA_FLAG_TCIF5 | DMA_FLAG_FEIF5 | DMA_FLAG_DMEIF5 | DMA_FLAG_TEIF5 | DMA_FLAG_HTIF5); break;
@@ -63,9 +64,9 @@ void UART::receive()
             case DMA2_Stream1_BASE:DMA_ClearFlag(m_stream, DMA_FLAG_TCIF1 | DMA_FLAG_FEIF1 | DMA_FLAG_DMEIF1 | DMA_FLAG_TEIF1 | DMA_FLAG_HTIF1); break;
             default:break;
             }
-            while (DMA_GetCmdStatus(m_stream) != DISABLE) {}		//È·±£DMA¿ÉÒÔ±»ÉèÖÃ  
-            DMA_SetCurrDataCounter(m_stream, MAXLEN); 	//ÉèÖÃDMAÊı¾İ´«ÊäÁ¿ 
-            DMA_Cmd(m_stream, ENABLE);                     		//¿ªÆôDMA´«Êä 
+            while (DMA_GetCmdStatus(m_stream) != DISABLE) {}		//ç¡®ä¿DMAå¯ä»¥è¢«è®¾ç½®  
+            DMA_SetCurrDataCounter(m_stream, MAXLEN); 	//è®¾ç½®DMAæ•°æ®ä¼ è¾“é‡ 
+            DMA_Cmd(m_stream, ENABLE);                     		//å¼€å¯DMAä¼ è¾“ 
         }
     }
     
@@ -127,8 +128,8 @@ void UART::init(USART_TypeDef* UARTx, uint32_t BaudRate, std::vector<GPIO> UART_
     {
         USART_ITConfig(UARTx, USART_IT_IDLE, ENABLE);;
         USART_DMACmd(UARTx, USART_DMAReq_Rx, ENABLE);
-        if (UARTx == USART6) DMA_RX_Config(m_stream, DMA_Channel_5, (u32)&UARTx->DR, (u32)DMA_TEMP, MAXLEN);
-        else  DMA_RX_Config(m_stream, DMA_Channel_4, (u32)&UARTx->DR, (u32)DMA_TEMP, MAXLEN);//ÆäËû¶¼ÊÇÍ¨µÀ4
+        if (UARTx == USART6) DMA_RX_Config(m_stream, DMA_Channel_5, (u32)&UARTx->DR, (u32)DMA_TEMP_ptr, MAXLEN);
+        else  DMA_RX_Config(m_stream, DMA_Channel_4, (u32)&UARTx->DR, (u32)DMA_TEMP_ptr, MAXLEN);//å…¶ä»–éƒ½æ˜¯é€šé“4
     }
     
     USART_Init(UARTx, &UART_init);
@@ -144,34 +145,34 @@ void UART::set_transmit_data(uint8_t* data, uint32_t length)
 void UART::DMA_RX_Config(DMA_Stream_TypeDef* DMA_Streamx, u32 chx, u32 par, u32 mar, u16 ndtr)
 {
     DMA_InitTypeDef  DMA_InitStructure;
-    if ((u32)DMA_Streamx > (u32)DMA2)//µÃµ½µ±Ç°streamÊÇÊôÓÚDMA2»¹ÊÇDMA1
+    if ((u32)DMA_Streamx > (u32)DMA2)//å¾—åˆ°å½“å‰streamæ˜¯å±äºDMA2è¿˜æ˜¯DMA1
     {
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);	//DMA2Ê±ÖÓÊ¹ÄÜ 
+        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA2, ENABLE);	//DMA2æ—¶é’Ÿä½¿èƒ½ 
     }
     else
     {
-        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);	//DMA1Ê±ÖÓÊ¹ÄÜ 
+        RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);	//DMA1æ—¶é’Ÿä½¿èƒ½ 
     }
     DMA_DeInit(DMA_Streamx);
-    while (DMA_GetCmdStatus(DMA_Streamx) != DISABLE) {}		//µÈ´ıDMA¿ÉÅäÖÃ 
+    while (DMA_GetCmdStatus(DMA_Streamx) != DISABLE) {}		//ç­‰å¾…DMAå¯é…ç½® 
 
-    /*ÅäÖÃ DMA Stream*/
-    DMA_InitStructure.DMA_Channel = chx;  							//Í¨µÀÑ¡Ôñ
-    DMA_InitStructure.DMA_PeripheralBaseAddr = par;					//DMAÍâÉèµØÖ·
-    DMA_InitStructure.DMA_Memory0BaseAddr = mar;					//DMA´æ´¢Æ÷0µØÖ·
-    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;			//ÍâÉèµ½´æ´¢Æ÷
-    DMA_InitStructure.DMA_BufferSize = ndtr;						//Êı¾İ´«ÊäÁ¿ 
-    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;//ÍâÉè·ÇÔöÁ¿Ä£Ê½
-    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;			//´æ´¢Æ÷ÔöÁ¿Ä£Ê½
-    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;//ÍâÉèÊı¾İ³¤¶È:8Î»
-    DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;	//´æ´¢Æ÷Êı¾İ³¤¶È:8Î»
-    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal; 					//Õı³£Ä£Ê½£¬¼´ÂúÁË¾Í²»ÔÚ½ÓÊÕÁË£¬¶ø²»ÊÇÑ­»·´æ´¢
-    DMA_InitStructure.DMA_Priority = DMA_Priority_VeryHigh;			//¸ßÓÅÏÈ¼¶
+    /*é…ç½® DMA Stream*/
+    DMA_InitStructure.DMA_Channel = chx;  							//é€šé“é€‰æ‹©
+    DMA_InitStructure.DMA_PeripheralBaseAddr = par;					//DMAå¤–è®¾åœ°å€
+    DMA_InitStructure.DMA_Memory0BaseAddr = mar;					//DMAå­˜å‚¨å™¨0åœ°å€
+    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;			//å¤–è®¾åˆ°å­˜å‚¨å™¨
+    DMA_InitStructure.DMA_BufferSize = ndtr;						//æ•°æ®ä¼ è¾“é‡ 
+    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;//å¤–è®¾éå¢é‡æ¨¡å¼
+    DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;			//å­˜å‚¨å™¨å¢é‡æ¨¡å¼
+    DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;//å¤–è®¾æ•°æ®é•¿åº¦:8ä½
+    DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;	//å­˜å‚¨å™¨æ•°æ®é•¿åº¦:8ä½
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal; 					//æ­£å¸¸æ¨¡å¼ï¼Œå³æ»¡äº†å°±ä¸åœ¨æ¥æ”¶äº†ï¼Œè€Œä¸æ˜¯å¾ªç¯å­˜å‚¨
+    DMA_InitStructure.DMA_Priority = DMA_Priority_VeryHigh;			//é«˜ä¼˜å…ˆçº§
     DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;
     DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
-    DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;		//´æ´¢Æ÷Í»·¢µ¥´Î´«Êä£¿£¿£¿
-    DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;//ÍâÉèÍ»·¢µ¥´Î´«Êä£¿£¿£¿
-    DMA_Init(DMA_Streamx, &DMA_InitStructure);						//³õÊ¼»¯DMA Stream
+    DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;		//å­˜å‚¨å™¨çªå‘å•æ¬¡ä¼ è¾“ï¼Ÿï¼Ÿï¼Ÿ
+    DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;//å¤–è®¾çªå‘å•æ¬¡ä¼ è¾“ï¼Ÿï¼Ÿï¼Ÿ
+    DMA_Init(DMA_Streamx, &DMA_InitStructure);						//åˆå§‹åŒ–DMA Stream
     switch ((uint32_t)DMA_Streamx)
     {
     case DMA2_Stream5_BASE:DMA_ClearFlag(DMA_Streamx, DMA_FLAG_TCIF5);	 break;
@@ -182,17 +183,17 @@ void UART::DMA_RX_Config(DMA_Stream_TypeDef* DMA_Streamx, u32 chx, u32 par, u32 
     case DMA2_Stream1_BASE:DMA_ClearFlag(DMA_Streamx, DMA_FLAG_TCIF1);	 break;
     default:break;
     }
-    //DMA_ClearFlag(DMA_Streamx, DMA_FLAG_TCIF5);						//Çå³ı´«ÊäÍê³ÉÖĞ¶Ï
-    //¿ªÆôDMA´íÎóºÍ½ÓÊÕÍê³ÉÖĞ¶Ï +£¨Ê¹ÄÜ½ÓÊÕÍê³ÉÖĞ¶ÏÊÇÎªÁË·ÀÖ¹Ò»´ÎĞÔ½ÓÊÕ¹ı³¤Êı¾İ£©
+    //DMA_ClearFlag(DMA_Streamx, DMA_FLAG_TCIF5);						//æ¸…é™¤ä¼ è¾“å®Œæˆä¸­æ–­
+    //å¼€å¯DMAé”™è¯¯å’Œæ¥æ”¶å®Œæˆä¸­æ–­ +ï¼ˆä½¿èƒ½æ¥æ”¶å®Œæˆä¸­æ–­æ˜¯ä¸ºäº†é˜²æ­¢ä¸€æ¬¡æ€§æ¥æ”¶è¿‡é•¿æ•°æ®ï¼‰
     DMA_ITConfig(DMA_Streamx, DMA_IT_TE | DMA_IT_TC, ENABLE);
-    //NVIC_Configuration(2, 2);										//NVIC ÅäÖÃ
+    //NVIC_Configuration(2, 2);										//NVIC é…ç½®
 
-    DMA_Cmd(DMA_Streamx, ENABLE);									//Ê¹ÄÜDMA
+    DMA_Cmd(DMA_Streamx, ENABLE);									//ä½¿èƒ½DMA
 }
 
 void UART::DMA_TX_Config(DMA_Stream_TypeDef* DMA_Streamx, u32 chx, u32 par, u32 mar, u16 ndtr)
 {
-    //Ã»Ğ´
+    //æ²¡å†™
 }
 
 extern "C" void USART1_IRQHandler(void)
@@ -215,8 +216,8 @@ extern "C" void USART3_IRQHandler(void)
 {
     if (uart[3].m_UART->UART_IRQHandler)
     {
-        uart[3].m_UART->UART_IRQHandler(uart[3].m_UART->p_use);
         uart[3].m_UART->receive();
+        uart[3].m_UART->UART_IRQHandler(uart[3].m_UART->p_use);
     }
 }
 extern "C" void UART4_IRQHandler(void)
@@ -229,11 +230,10 @@ extern "C" void UART4_IRQHandler(void)
 }
 extern "C" void UART5_IRQHandler(void)
 {
-    
-    if (1||uart[5].m_UART->UART_IRQHandler)
+    if (uart[5].m_UART->UART_IRQHandler)
     {
         uart[5].m_UART->receive();
-        //uart[5].m_UART->UART_IRQHandler(uart[5].m_UART->p_use);
+        uart[5].m_UART->UART_IRQHandler(uart[5].m_UART->p_use);
     }
 }
 extern "C" void USART6_IRQHandler(void)

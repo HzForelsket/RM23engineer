@@ -103,7 +103,7 @@ void IIC::send_data(uint8_t data)
 		GPIO_ResetBits(m_SCL.get_m_GPIOx(), m_SCL.getPin());
 		for (int in = 0; in < 8; in++)         
 		{
-			if (data & 0x80)//½«datµÄ8Î»´Ó×î¸ßÎ»ÒÀ´ÎÐ´Èë
+			if (data & 0x80)//å°†datçš„8ä½ä»Žæœ€é«˜ä½ä¾æ¬¡å†™å…¥
 			{
 				GPIO_SetBits(m_SDA.get_m_GPIOx(), m_SDA.getPin());
 			}

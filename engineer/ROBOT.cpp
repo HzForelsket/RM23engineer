@@ -1,28 +1,28 @@
 #include "ROBOT.h"
 /*
-* WASD ×îËÙµ×ÅÌÇ°ºó×óÓÒ
-* QE ×îËÙµ×ÅÌ×óÐýÓÒÐý
-* Gµ¥»÷¿ªÆô¸ºÑ¹£¬ÔÙ´Îµã»÷¹Ø±Õ
+* WASD æœ€é€Ÿåº•ç›˜å‰åŽå·¦å³
+* QE æœ€é€Ÿåº•ç›˜å·¦æ—‹å³æ—‹
+* Gå•å‡»å¼€å¯è´ŸåŽ‹ï¼Œå†æ¬¡ç‚¹å‡»å…³é—­
 *
-* CTRL+WASD »ùÓÚµ±Ç°ËÙ¶ÈÔöËÙµ×ÅÌÇ°ºó×óÓÒ
-* CTRL+QR »ùÓÚµ±Ç°ËÙ¶ÈÔöËÙµ×ÅÌ×óÐýÓÒÐý
-* Z ×Ô¶¯ÉìÕ¹¿Õ½ÓÒ»
+* CTRL+WASD åŸºäºŽå½“å‰é€Ÿåº¦å¢žé€Ÿåº•ç›˜å‰åŽå·¦å³
+* CTRL+QR åŸºäºŽå½“å‰é€Ÿåº¦å¢žé€Ÿåº•ç›˜å·¦æ—‹å³æ—‹
+* Z è‡ªåŠ¨ä¼¸å±•ç©ºæŽ¥ä¸€
 *
-* ×îËÙÊó±ê×ó¼üÍÆ³ö£¬ÓÒ¼üÊÕÈë
-* ×îËÙÊó±ê¹öÂÖÌ§ÉýÏÂ½µ
-* RF ×îËÙÌ§Éý½µµÍ¿óÊ¯¼Ü
-* XC ×îËÙË³ÄæÐý¿óÊ¯
+* æœ€é€Ÿé¼ æ ‡å·¦é”®æŽ¨å‡ºï¼Œå³é”®æ”¶å…¥
+* æœ€é€Ÿé¼ æ ‡æ»šè½®æŠ¬å‡ä¸‹é™
+* RF æœ€é€ŸæŠ¬å‡é™ä½ŽçŸ¿çŸ³æž¶
+* XC æœ€é€Ÿé¡ºé€†æ—‹çŸ¿çŸ³
 * 
-* SHIFT+Êó±ê×ó¼üÍÆ³ö£¬ÓÒ¼ü »ùÓÚµ±Ç°ËÙ¶ÈÔöËÙÊó±ê×ó¼üÍÆ³ö£¬ÓÒ¼üÊÕÈë
-* SHIFT+Êó±ê¹öÂÖ »ùÓÚµ±Ç°ËÙ¶ÈÔöËÙÊó±ê¹öÂÖ Ì§ÉýÏÂ½µ
-* SHIFT+RF »ùÓÚµ±Ç°ËÙ¶ÈÔöËÙÌ§Éý½µµÍ¿óÊ¯¼Ü
-* SHIFT+XC »ùÓÚµ±Ç°ËÙ¶ÈÔöËÙË³ÄæÐý¿óÊ¯
+* SHIFT+é¼ æ ‡å·¦é”®æŽ¨å‡ºï¼Œå³é”® åŸºäºŽå½“å‰é€Ÿåº¦å¢žé€Ÿé¼ æ ‡å·¦é”®æŽ¨å‡ºï¼Œå³é”®æ”¶å…¥
+* SHIFT+é¼ æ ‡æ»šè½® åŸºäºŽå½“å‰é€Ÿåº¦å¢žé€Ÿé¼ æ ‡æ»šè½® æŠ¬å‡ä¸‹é™
+* SHIFT+RF åŸºäºŽå½“å‰é€Ÿåº¦å¢žé€ŸæŠ¬å‡é™ä½ŽçŸ¿çŸ³æž¶
+* SHIFT+XC åŸºäºŽå½“å‰é€Ÿåº¦å¢žé€Ÿé¡ºé€†æ—‹çŸ¿çŸ³
 * 
 * 
-* Êó±êx,y ÊÓÒ°×óÓÒÉÏÏÂ
-* SHIFT+Êó±êx,y ×¦×Óroll£¬pitch
+* é¼ æ ‡x,y è§†é‡Žå·¦å³ä¸Šä¸‹
+* SHIFT+é¼ æ ‡x,y çˆªå­rollï¼Œpitch
 *
-* CTRL+ZËùÓÐµç»úÊÍÁ¦
+* CTRL+Zæ‰€æœ‰ç”µæœºé‡ŠåŠ›
 */
 void ROBOT::upDate()
 {
@@ -157,10 +157,11 @@ void ROBOT::upDate()
 	}
 }
 
-void ROBOT::init(RC* rc, CHASSIS* chassis, CLAW* claw,VIEW* view)
+void ROBOT::init(RC* rc, CHASSIS* chassis, CLAW* claw,VIEW* view, JUDGEMENT* judgement)
 {
 	m_rc = rc;
 	m_chassis = chassis;
 	m_claw = claw;
 	m_view = view;
+	m_judgement = judgement;
 }

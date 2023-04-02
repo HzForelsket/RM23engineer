@@ -29,7 +29,7 @@ class CAN
 	void On_IQRHander();
 public:
 	void open_receive_interrput();
-	void (*m_CANx_IRQHandler)(void);//中断任务执行函数指针
+	void (*m_CANx_IRQHandler)(void);//涓柇浠诲姟鎵ц鍑芥暟鎸囬拡
 	std::map<uint32_t, RECEIVE_TEMP>::iterator read_data(uint32_t stdId);
 	uint8_t transmit_data();
 	void set_transmit_data(uint8_t* data,uint8_t length, uint8_t offset=0, uint32_t stdId=0);

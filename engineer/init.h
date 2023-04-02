@@ -11,6 +11,7 @@
 #include"ROBOT.h"
 #include"JUDGEMENT.h"
 #include"GRAPH.h"
+#include"UI.h"
 void taskFunction();
 void errorDetectFunction();
 void init();

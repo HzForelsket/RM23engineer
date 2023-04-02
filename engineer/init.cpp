@@ -1,7 +1,7 @@
 #include "init.h"
 CAN can1, can2;
 TIMER task , error_detect;
-UART uart2,uart3,uart5;
+UART uart2, judgement_uart3, judgement_uart5;
 RC rc;
 JUDGEMENT judgement;
 ROBOT robot;
@@ -64,17 +64,19 @@ void init()
 
 	rx1.init(GPIOC, GPIO_Pin_10, GPIO_Mode_AF, GPIO_OType_PP, GPIO_PuPd_NOPULL);
 	tx1.init(GPIOC, GPIO_Pin_11, GPIO_Mode_AF, GPIO_OType_PP, GPIO_PuPd_NOPULL);
-	uart3.init(USART3, 115200, { rx1,tx1 }, 100, true);
-	judgement.init(&uart3);
+	judgement_uart3.init(USART3, 115200, { rx1,tx1 }, 100, true);
 
 	rx1.init(GPIOD, GPIO_Pin_2, GPIO_Mode_AF, GPIO_OType_PP, GPIO_PuPd_NOPULL);
 	tx1.init(GPIOC, GPIO_Pin_12, GPIO_Mode_AF, GPIO_OType_PP, GPIO_PuPd_NOPULL);
-	uart5.init(UART5, 115200, { rx1,tx1 }, 100, true);
+	judgement_uart5.init(UART5, 115200, { rx1,tx1 }, 100, true);
 
-	robot.init(&rc, &chassis, &claw, nullptr);
+	judgement.init(&judgement_uart3);
+
+	robot.init(&rc, &chassis, &claw, nullptr,&judgement);
 	task.initBase(TIMER::BASE, TIM1, 500,true);
 	task.m_TIMEx_IRQHandler = taskFunction;
 
-	error_detect.initBase(TIMER::BASE, TIM2, 5, true);
+
+	error_detect.initBase(TIMER::BASE, TIM2, 1, true);
 	error_detect.m_TIMEx_IRQHandler = errorDetectFunction;
 }

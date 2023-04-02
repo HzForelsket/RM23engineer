@@ -17,7 +17,7 @@ private:
 	MOTOR ** m_motor=nullptr;
 	const uint8_t m_motorNumbers;
 	bool m_status = false;
-	int32_t m_z = 0, m_y = 0, m_pitch = 0, m_roll = 0, m_set_z = 0, m_set_y = 0, m_set_pitch = 0, //”“«∞…œ,xyz’˝
+	int32_t m_z = 0, m_y = 0, m_pitch = 0, m_roll = 0, m_set_z = 0, m_set_y = 0, m_set_pitch = 0, //Âè≥Ââç‰∏ä,xyzÊ≠£
 		m_set_roll = 0;
 	int32_t m_mine_pitch = 0, m_set_mine_lift = 0, m_set_mine_pitch = 0, m_mine_lift = 0;
 	int32_t m_max_first_lift_angle = 500000, m_max_second_lift_angle = m_max_first_lift_angle+280000, m_max_push_angle = 820000, m_max_pitch_angle = 116736, m_min_pitch_angle =0 ,
