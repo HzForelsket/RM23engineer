@@ -29,7 +29,7 @@ private:
     template<typename T>
     T getAngleDelta(T now, T pre, T direct);
     template<typename T>
-    T setInRange(T data, T max, T min);//ÉèÖÃÊı¾İ·¶Î§
+    T setInRange(T data, T max, T min);//è®¾ç½®æ•°æ®èŒƒå›´
 public:
     void setSpeed(int32_t speed);
     void changeAngle(int32_t angle);

@@ -11,8 +11,8 @@ private:
  static CAN_X can_x[2];
  void CAN::On_IQRHander()
  {
-     if (CAN_MessagePending(m_can, CAN_FIFO0) == 0)return;		//Ã»ÓĞ½ÓÊÕµ½Êı¾İ,Ö±½ÓÍË³ö 
-     CAN_Receive(m_can, CAN_FIFO0, &m_receive);//¶ÁÈ¡Êı¾İ	
+     if (CAN_MessagePending(m_can, CAN_FIFO0) == 0)return;		//æ²¡æœ‰æ¥æ”¶åˆ°æ•°æ®,ç›´æ¥é€€å‡º 
+     CAN_Receive(m_can, CAN_FIFO0, &m_receive);//è¯»å–æ•°æ®	
      RECEIVE_TEMP temp(m_receive.Data);
      m_receive_data[m_receive.StdId]= temp;
      /*
@@ -29,11 +29,11 @@ private:
     can_x[m_can == CAN2].On_IQRHandler = *func;
     NVIC_InitTypeDef  NVIC_InitStructure;
 
-    CAN_ITConfig(m_can, CAN_IT_FMP0, ENABLE);//FIFO0ÏûÏ¢¹ÒºÅÖĞ¶ÏÔÊĞí.		    
+    CAN_ITConfig(m_can, CAN_IT_FMP0, ENABLE);//FIFO0æ¶ˆæ¯æŒ‚å·ä¸­æ–­å…è®¸.		    
 
     NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX0_IRQn + (m_can == CAN2) * 44;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;     // Ö÷ÓÅÏÈ¼¶Îª1
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;            // ´ÎÓÅÏÈ¼¶Îª0
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;     // ä¸»ä¼˜å…ˆçº§ä¸º1
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;            // æ¬¡ä¼˜å…ˆçº§ä¸º0
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
  }
@@ -51,14 +51,14 @@ uint8_t CAN::transmit_data()
     for (auto i : m_transmit_data)
     {
         uint8_t ii = 1;
-        m_transmit.StdId = i.first;	 // ±ê×¼±êÊ¶·ûÎª0
-        m_transmit.ExtId = i.first;	 // ÉèÖÃÀ©Õ¹±êÊ¾·û£¨29Î»£©
-        m_transmit.IDE = 0;		  // Ê¹ÓÃÀ©Õ¹±êÊ¶·û
-        m_transmit.RTR = 0;		  // ÏûÏ¢ÀàĞÍÎªÊı¾İÖ¡£¬Ò»Ö¡8Î»
-        m_transmit.DLC = 8;							 // ·¢ËÍĞÅÏ¢
+        m_transmit.StdId = i.first;	 // æ ‡å‡†æ ‡è¯†ç¬¦ä¸º0
+        m_transmit.ExtId = i.first;	 // è®¾ç½®æ‰©å±•æ ‡ç¤ºç¬¦ï¼ˆ29ä½ï¼‰
+        m_transmit.IDE = 0;		  // ä½¿ç”¨æ‰©å±•æ ‡è¯†ç¬¦
+        m_transmit.RTR = 0;		  // æ¶ˆæ¯ç±»å‹ä¸ºæ•°æ®å¸§ï¼Œä¸€å¸§8ä½
+        m_transmit.DLC = 8;							 // å‘é€ä¿¡æ¯
         memcpy(m_transmit.Data, i.second.m_transmit_data, sizeof(uint8_t) * 8);
         mbox = CAN_Transmit(m_can, &m_transmit);
-        while (status == CAN_TxStatus_Failed && ii++)//µÈ´ı·¢ËÍ½áÊø
+        while (status == CAN_TxStatus_Failed && ii++)//ç­‰å¾…å‘é€ç»“æŸ
         {
             status = CAN_TransmitStatus(m_can, mbox);
         }
@@ -91,37 +91,37 @@ CAN& CAN::init(GPIO& rx, GPIO& tx, CAN_TypeDef* can, uint8_t tsjw, uint8_t tbs2,
 
     CAN_InitTypeDef        CAN_InitStructure;
     CAN_FilterInitTypeDef  CAN_FilterInitStructure;
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1 << (can == CAN2) | RCC_APB1Periph_CAN1, ENABLE);//Ê¹ÄÜCANÊ±ÖÓ	
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1 << (can == CAN2) | RCC_APB1Periph_CAN1, ENABLE);//ä½¿èƒ½CANæ—¶é’Ÿ	
 
-    //Òı½Å¸´ÓÃÓ³ÉäÅäÖÃ
-    GPIO_PinAFConfig(rx.get_m_GPIOx(), GPIO::calculateGPIO_PinSourcex(&rx), (uint8_t)0x09); //CAN1 CAN2 ¸´ÓÃ¶¼ÊÇ0x09  GPIO_AF_CAN1 GPIO_AF_CAN2
+    //å¼•è„šå¤ç”¨æ˜ å°„é…ç½®
+    GPIO_PinAFConfig(rx.get_m_GPIOx(), GPIO::calculateGPIO_PinSourcex(&rx), (uint8_t)0x09); //CAN1 CAN2 å¤ç”¨éƒ½æ˜¯0x09  GPIO_AF_CAN1 GPIO_AF_CAN2
     GPIO_PinAFConfig(tx.get_m_GPIOx(), GPIO::calculateGPIO_PinSourcex(&tx), (uint8_t)0x09);
 
-    //CANµ¥ÔªÉèÖÃ
-    CAN_InitStructure.CAN_TTCM = DISABLE;	//·ÇÊ±¼ä´¥·¢Í¨ĞÅÄ£Ê½   
-    CAN_InitStructure.CAN_ABOM = DISABLE;	//Èí¼ş×Ô¶¯ÀëÏß¹ÜÀí	  
-    CAN_InitStructure.CAN_AWUM = DISABLE;//Ë¯ÃßÄ£Ê½Í¨¹ıÈí¼ş»½ĞÑ(Çå³ıCAN->MCRµÄSLEEPÎ»)
-    CAN_InitStructure.CAN_NART = ENABLE;	//½ûÖ¹±¨ÎÄ×Ô¶¯´«ËÍ 
-    CAN_InitStructure.CAN_RFLM = DISABLE;	//±¨ÎÄ²»Ëø¶¨,ĞÂµÄ¸²¸Ç¾ÉµÄ  
-    CAN_InitStructure.CAN_TXFP = DISABLE;	//ÓÅÏÈ¼¶ÓÉ±¨ÎÄ±êÊ¶·û¾ö¶¨ 
-    CAN_InitStructure.CAN_Mode = mode;	 //Ä£Ê½ÉèÖÃ 
-    CAN_InitStructure.CAN_SJW = tsjw;	//ÖØĞÂÍ¬²½ÌøÔ¾¿í¶È(Tsjw)Îªtsjw+1¸öÊ±¼äµ¥Î» CAN_SJW_1tq~CAN_SJW_4tq
-    CAN_InitStructure.CAN_BS1 = tbs1; //Tbs1·¶Î§CAN_BS1_1tq ~CAN_BS1_16tq
-    CAN_InitStructure.CAN_BS2 = tbs2;//Tbs2·¶Î§CAN_BS2_1tq ~	CAN_BS2_8tq
-    CAN_InitStructure.CAN_Prescaler = brp;  //·ÖÆµÏµÊı(Fdiv)Îªbrp+1	
-    CAN_Init(can, &CAN_InitStructure);   // ³õÊ¼»¯CAN1 
+    //CANå•å…ƒè®¾ç½®
+    CAN_InitStructure.CAN_TTCM = DISABLE;	//éæ—¶é—´è§¦å‘é€šä¿¡æ¨¡å¼   
+    CAN_InitStructure.CAN_ABOM = DISABLE;	//è½¯ä»¶è‡ªåŠ¨ç¦»çº¿ç®¡ç†	  
+    CAN_InitStructure.CAN_AWUM = DISABLE;//ç¡çœ æ¨¡å¼é€šè¿‡è½¯ä»¶å”¤é†’(æ¸…é™¤CAN->MCRçš„SLEEPä½)
+    CAN_InitStructure.CAN_NART = ENABLE;	//ç¦æ­¢æŠ¥æ–‡è‡ªåŠ¨ä¼ é€ 
+    CAN_InitStructure.CAN_RFLM = DISABLE;	//æŠ¥æ–‡ä¸é”å®š,æ–°çš„è¦†ç›–æ—§çš„  
+    CAN_InitStructure.CAN_TXFP = DISABLE;	//ä¼˜å…ˆçº§ç”±æŠ¥æ–‡æ ‡è¯†ç¬¦å†³å®š 
+    CAN_InitStructure.CAN_Mode = mode;	 //æ¨¡å¼è®¾ç½® 
+    CAN_InitStructure.CAN_SJW = tsjw;	//é‡æ–°åŒæ­¥è·³è·ƒå®½åº¦(Tsjw)ä¸ºtsjw+1ä¸ªæ—¶é—´å•ä½ CAN_SJW_1tq~CAN_SJW_4tq
+    CAN_InitStructure.CAN_BS1 = tbs1; //Tbs1èŒƒå›´CAN_BS1_1tq ~CAN_BS1_16tq
+    CAN_InitStructure.CAN_BS2 = tbs2;//Tbs2èŒƒå›´CAN_BS2_1tq ~	CAN_BS2_8tq
+    CAN_InitStructure.CAN_Prescaler = brp;  //åˆ†é¢‘ç³»æ•°(Fdiv)ä¸ºbrp+1	
+    CAN_Init(can, &CAN_InitStructure);   // åˆå§‹åŒ–CAN1 
 
-    //ÅäÖÃ¹ıÂËÆ÷
-    CAN_FilterInitStructure.CAN_FilterNumber = 0 + (can == CAN2) * 14;	  //¹ıÂËÆ÷
+    //é…ç½®è¿‡æ»¤å™¨
+    CAN_FilterInitStructure.CAN_FilterNumber = 0 + (can == CAN2) * 14;	  //è¿‡æ»¤å™¨
     CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdMask;
-    CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit; //32Î» 
-    CAN_FilterInitStructure.CAN_FilterIdHigh = 0x0000;////32Î»ID
+    CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit; //32ä½ 
+    CAN_FilterInitStructure.CAN_FilterIdHigh = 0x0000;////32ä½ID
     CAN_FilterInitStructure.CAN_FilterIdLow = 0x0000;
-    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0x0000;//32Î»MASK
+    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0x0000;//32ä½MASK
     CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0x0000;
-    CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;//¹ıÂËÆ÷0¹ØÁªµ½FIFO0
-    CAN_FilterInitStructure.CAN_FilterActivation = ENABLE; //¼¤»î¹ıÂËÆ÷0
-    CAN_FilterInit(&CAN_FilterInitStructure);//ÂË²¨Æ÷³õÊ¼»¯
+    CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;//è¿‡æ»¤å™¨0å…³è”åˆ°FIFO0
+    CAN_FilterInitStructure.CAN_FilterActivation = ENABLE; //æ¿€æ´»è¿‡æ»¤å™¨0
+    CAN_FilterInit(&CAN_FilterInitStructure);//æ»¤æ³¢å™¨åˆå§‹åŒ–
     return (*this);
 }
 

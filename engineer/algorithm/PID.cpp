@@ -30,14 +30,14 @@ double PID::Filter(double delta)
 		sum += m_filter[t];
 	return sum / static_cast<double>(FILTER);
 }
-double PID::Delta(double error)//‘ˆ¡øpid
+double PID::Delta(double error)//Â¢ûÈáèpid
 {
 	m_error[LLAST] = m_error[LAST] * 0.92f;
 	m_error[LAST] = m_error[NOW] * 0.92f;
 	m_error[NOW] = error * 1.08f;
 	return  m_P*(m_error[NOW] - m_error[LAST]) + m_I * m_error[NOW] + m_D * (m_error[NOW] - 2 * m_error[LAST] + m_error[LLAST]);
 }
-double PID::Position(double error)//Œª÷√pid
+double PID::Position(double error)//‰ΩçÁΩÆpid
 {
 	m_error[NOW] = error;
 	m_error[INTEGRATE] += m_error[NOW];

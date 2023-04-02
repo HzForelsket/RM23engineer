@@ -46,6 +46,8 @@
       <PreprocessorDefinitions>DEBUG=1;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalSystemIncludeDirectories>%(AdditionalSystemIncludeDirectories)</AdditionalSystemIncludeDirectories>
       <DumpStackUsage>true</DumpStackUsage>
+      <CPPLanguageStandard>
+      </CPPLanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLinkerInputs>;%(Link.AdditionalLinkerInputs)</AdditionalLinkerInputs>
@@ -55,6 +57,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ResourceCompile Include="engineer.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
@@ -83,6 +86,7 @@
     <ClCompile Include="Src\TIMER.cpp" />
     <ClCompile Include="Src\UART.cpp" />
     <ClCompile Include="system_stm32f4xx.c" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="VECTOR3.cpp" />
     <ClCompile Include="VIEW.cpp" />
     <ClInclude Include="algorithm\KALMAN.h" />
@@ -90,6 +94,7 @@
     <ClInclude Include="CHASSIS.h" />
     <ClInclude Include="CLAW.h" />
     <ClInclude Include="GRAPH.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ROBOT.h" />
     <ClInclude Include="CRC_CHECK.h" />
     <ClInclude Include="Include\CAN.h" />
@@ -106,6 +111,7 @@
     <ClInclude Include="MOTOR_3508.h" />
     <ClInclude Include="RC.h" />
     <ClInclude Include="SELF_CHECK.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="VECTOR3.h" />
     <ClInclude Include="VIEW.h" />
     <None Include="stm32.props" />

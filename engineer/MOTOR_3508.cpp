@@ -1,5 +1,4 @@
 #include "MOTOR_3508.h"
-
 void MOTOR_3508::setSpeed(int32_t speed)
 {
 	m_set_speed = setInRange<int32_t>( speed,MAX_SPEED,-MAX_SPEED);
