@@ -1,5 +1,6 @@
 #include"init.h"
 #include"CRC_CHECK.h"
+//25Mhz
 extern ROBOT robot;
 //extern CLAW claw;
 //extern CHASSIS chassis;
